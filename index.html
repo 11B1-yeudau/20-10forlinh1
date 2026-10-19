@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Vietnamese Women's Day 20/10 - Mai Linh</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@400;600;700&family=Pacifico&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Quicksand', sans-serif;
+            overflow-x: hidden;
+            background-color: #fbcfe8;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        .font-handwriting {
+            font-family: 'Dancing Script', cursive;
+        }
+
+        .font-pacifico {
+            font-family: 'Pacifico', cursive;
+        }
+
+        /* Mây trôi */
+        .cloud {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.85);
+            border-radius: 50px;
+            filter: blur(2px);
+            animation: floatCloud 18s linear infinite;
+        }
+
+        @keyframes floatCloud {
+            0% { transform: translateX(-150px); }
+            100% { transform: translateX(100vw); }
+        }
+
+        /* Tim bay */
+        @keyframes floatUp {
+            0% { transform: translateY(0) scale(0.8) rotate(0deg); opacity: 0.8; }
+            50% { opacity: 1; }
+            100% { transform: translateY(-100vh) scale(1.2) rotate(360deg); opacity: 0; }
+        }
+
+        .floating-heart {
+            position: absolute;
+            pointer-events: none;
+            animation: floatUp linear infinite;
+        }
+
+        /* Thiên thần nhún nhảy */
+        @keyframes floatCupid {
+            0%, 100% { transform: translateY(0px) rotate(-2deg); }
+            50% { transform: translateY(-15px) rotate(2deg); }
+        }
+
+        .cupid-anim {
+            animation: floatCupid 4s ease-in-out infinite;
+        }
+
+        /* Lật thẻ 3D */
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+
+        .card-inner {
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+        }
+
+        .card-inner.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-front, .card-back {
+            backface-visibility: hidden;
+        }
+
+        .card-back {
+            transform: rotateY(180deg);
+        }
+
+        /* Hiệu ứng Glow chữ */
+        .glow-text {
+            text-shadow: 0 0 10px rgba(244, 63, 94, 0.8),
+                         0 0 20px rgba(244, 63, 94, 0.6),
+                         0 0 30px rgba(244, 63, 94, 0.4);
+        }
+
+        /* 3D Carousel (Vòng xoay 6 ảnh) */
+        .carousel-container {
+            perspective: 1000px;
+            width: 280px;
+            height: 180px;
+            position: relative;
+            margin: 0 auto;
+        }
+
+        .carousel-spinner {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            transform-style: preserve-3d;
+            animation: spinCarousel 22s infinite linear;
+        }
+
+        @keyframes spinCarousel {
+            from { transform: rotateY(0deg); }
+            to { transform: rotateY(360deg); }
+        }
+
+        .carousel-card {
+            position: absolute;
+            width: 150px;
+            height: 100px;
+            left: 65px;
+            top: 40px;
+            border-radius: 12px;
+            border: 3px solid rgba(255, 255, 255, 0.9);
+            box-shadow: 0 0 15px rgba(255, 105, 180, 0.6);
+            overflow: hidden;
+            background: #000;
+        }
+
+        /* Particle Canvas */
+        #heartCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Chữ chúc bay neon ở Stage 3 - Xuất hiện lần lượt */
+        .wish-tag {
+            position: absolute;
+            color: #ff70a6;
+            font-weight: 700;
+            font-size: 1.1rem;
+            white-space: nowrap;
+            text-shadow: 0 0 8px rgba(255, 112, 166, 0.9), 0 0 15px rgba(255, 182, 193, 0.7);
+            opacity: 0;
+            transform: scale(0.5);
+            animation: wishAppear 0.8s forwards ease-out, floatWish 6s infinite alternate ease-in-out;
+            pointer-events: none;
+        }
+
+        @keyframes wishAppear {
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes floatWish {
+            0% { transform: translateY(0px) scale(1); }
+            100% { transform: translateY(-10px) scale(1.05); }
+        }
+
+        /* Con trỏ hiệu ứng gõ chữ */
+        .typing-cursor::after {
+            content: '|';
+            animation: blink 0.7s infinite;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-pink-200 via-pink-300 to-rose-200 min-h-screen flex items-center justify-center p-2 sm:p-4 overflow-hidden select-none">
+
+    <!-- Thẻ phát nhạc nhac.mp4 ẩn -->
+    <audio id="bgMusic" src="nhac.mp4" loop preload="auto"></audio>
+
+    <!-- Nút Bật/Tắt nhạc nổi ở góc màn hình -->
+    <button id="musicToggleBtn" onclick="toggleMusic()" class="fixed top-4 right-4 z-50 w-10 h-10 bg-white/85 hover:bg-white text-rose-500 rounded-full shadow-lg flex items-center justify-center border-2 border-pink-300 transition-all duration-300">
+        <i id="musicIcon" class="fa-solid fa-music animate-spin" style="animation-duration: 4s;"></i>
+    </button>
+
+    <!-- Container chính -->
+    <div id="app" class="relative w-full max-w-4xl h-[90vh] max-h-[700px] bg-gradient-to-b from-pink-200 via-rose-100 to-pink-300 rounded-3xl shadow-2xl border-4 border-white/80 overflow-hidden flex flex-col justify-between transition-all duration-1000">
+
+        <!-- ==================== STAGE 1: GIFT OPEN SCREEN ==================== -->
+        <div id="stage1" class="absolute inset-0 z-20 flex flex-col items-center justify-center transition-opacity duration-1000 p-6">
+            <div class="cloud top-10 w-32 h-10 left-10"></div>
+            <div class="cloud top-20 w-48 h-12 right-12" style="animation-delay: -5s;"></div>
+            
+            <div class="absolute top-6 left-6 text-pink-400 text-4xl sm:text-5xl cupid-anim">
+                <i class="fa-solid font-bold">👼</i>
+            </div>
+            <div class="absolute top-6 right-6 text-pink-400 text-4xl sm:text-5xl cupid-anim" style="animation-delay: -2s;">
+                <i class="fa-solid font-bold">👼</i>
+            </div>
+
+            <div class="relative group cursor-pointer my-auto flex flex-col items-center" onclick="openGift()">
+                <div class="absolute -inset-4 bg-pink-400/30 rounded-full blur-xl group-hover:bg-pink-500/50 transition duration-500 animate-pulse"></div>
+                
+                <div class="relative bg-white/40 p-6 rounded-full backdrop-blur-sm border-2 border-white shadow-xl hover:scale-105 transition-transform duration-300">
+                    <svg class="w-32 h-32 sm:w-40 sm:h-40 drop-shadow-md" viewBox="0 0 100 100">
+                        <path d="M30 50 L50 90 L70 50 Z" fill="#f43f5e"/>
+                        <path d="M25 45 L50 85 L75 45 Z" fill="#fb7185" opacity="0.8"/>
+                        <path d="M45 65 Q50 68 55 65 Q60 62 55 60 Q50 62 45 60 Z" fill="#fff"/>
+                        <circle cx="50" cy="62.5" r="3" fill="#ffe4e6"/>
+                        <circle cx="35" cy="35" r="14" fill="#ff4d6d"/>
+                        <circle cx="50" cy="28" r="16" fill="#ff758f"/>
+                        <circle cx="65" cy="35" r="14" fill="#ff4d6d"/>
+                        <circle cx="42" cy="42" r="13" fill="#ff8fa3"/>
+                        <circle cx="58" cy="42" r="13" fill="#ff8fa3"/>
+                        <circle cx="35" cy="35" r="5" fill="#fff0f3"/>
+                        <circle cx="50" cy="28" r="6" fill="#fff0f3"/>
+                        <circle cx="65" cy="35" r="5" fill="#fff0f3"/>
+                    </svg>
+                </div>
+
+                <button class="mt-8 px-8 py-3 bg-gradient-to-r from-rose-400 to-pink-500 text-white font-bold text-lg rounded-full shadow-lg hover:shadow-rose-300/50 hover:scale-110 active:scale-95 transition-all duration-300 border-2 border-white flex items-center gap-2">
+                    <span>MỞ QUÀ</span>
+                    <i class="fa-solid fa-heart animate-bounce text-pink-200"></i>
+                </button>
+            </div>
+
+            <p class="text-rose-500 font-semibold mb-4 text-sm tracking-widest uppercase animate-pulse">Gửi tặng cho ebe đáng yêu nhất ❤️</p>
+        </div>
+
+
+        <!-- ==================== STAGE 2: GREETING & FLIPBOOK ==================== -->
+        <div id="stage2" class="absolute inset-0 z-10 opacity-0 pointer-events-none flex flex-col items-center justify-between p-4 sm:p-6 transition-opacity duration-1000">
+            
+            <div class="absolute top-4 left-4 text-pink-400 text-3xl sm:text-4xl cupid-anim">👼</div>
+            <div class="absolute top-4 right-4 text-pink-400 text-3xl sm:text-4xl cupid-anim" style="animation-delay: -2s;">👼</div>
+
+            <div class="text-center mt-2 z-10">
+                <h1 class="text-2xl sm:text-4xl font-extrabold text-rose-600 font-pacifico tracking-wide drop-shadow-sm glow-text">
+                    Happy Vietnamese Women's Day 20/10
+                </h1>
+                <h2 class="text-xl sm:text-3xl font-bold text-pink-600 font-handwriting mt-1">
+                    Mai Linh <span class="text-rose-500">❤️</span>
+                </h2>
+            </div>
+
+            <!-- Khung thiệp chứa ảnh và chữ -->
+            <div class="my-auto perspective-1000 w-full max-w-sm h-[320px] sm:h-[350px] cursor-pointer" onclick="nextCard()">
+                <div id="cardInner" class="card-inner relative w-full h-full rounded-2xl shadow-2xl border-4 border-white bg-white/90 backdrop-blur-sm p-3">
+                    
+                    <!-- Mặt trước -->
+                    <div class="card-front absolute inset-0 p-3 flex flex-col items-center justify-between">
+                        <div class="w-full h-44 sm:h-52 rounded-xl overflow-hidden bg-rose-50 border border-pink-200 relative flex-shrink-0">
+                            <img id="cardImgFront" src="anh1.jpg" class="w-full h-full object-cover" alt="Memory Photo">
+                        </div>
+                        <div class="w-full h-20 sm:h-24 flex items-center justify-center p-2 text-center overflow-y-auto">
+                            <p id="cardCaptionFront" class="text-rose-600 font-bold font-handwriting text-base sm:text-lg leading-snug"></p>
+                        </div>
+                    </div>
+
+                    <!-- Mặt sau -->
+                    <div class="card-back absolute inset-0 p-3 flex flex-col items-center justify-between">
+                        <div class="w-full h-44 sm:h-52 rounded-xl overflow-hidden bg-rose-50 border border-pink-200 relative flex-shrink-0">
+                            <img id="cardImgBack" src="anh2.jpg" class="w-full h-full object-cover" alt="Memory Photo">
+                        </div>
+                        <div class="w-full h-20 sm:h-24 flex items-center justify-center p-2 text-center overflow-y-auto">
+                            <p id="cardCaptionBack" class="text-rose-600 font-bold font-handwriting text-base sm:text-lg leading-snug"></p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Dòng chữ phụ bên dưới -->
+            <div class="text-center mb-2 z-10">
+                <p id="subCaption" class="text-rose-600 italic font-semibold text-xs sm:text-sm bg-white/60 px-4 py-1.5 rounded-full border border-pink-200 shadow-sm min-h-[32px] flex items-center justify-center">
+                    Cảm ơn em vì đã luôn ở bên anh ✨
+                </p>
+            </div>
+        </div>
+
+
+        <!-- ==================== STAGE 3: NIGHT PARTICLE HEART & 3D CAROUSEL ==================== -->
+        <div id="stage3" class="absolute inset-0 z-0 opacity-0 pointer-events-none bg-black transition-opacity duration-1000 flex flex-col items-center justify-center overflow-hidden">
+            
+            <canvas id="heartCanvas"></canvas>
+
+            <div id="nightLoader" class="absolute inset-0 bg-black z-30 flex flex-col items-center justify-center transition-opacity duration-700">
+                <div class="w-12 h-12 border-4 border-pink-500 border-t-transparent rounded-full animate-spin"></div>
+                <span class="text-pink-400 font-bold mt-4 tracking-widest text-sm">Loading...</span>
+            </div>
+
+            <!-- Các câu chúc bay xung quanh dạng Neon -->
+            <div id="floatingWishes" class="absolute inset-0 pointer-events-none z-10"></div>
+
+            <!-- Vòng xoay ảnh 3D Carousel (Đã đưa đủ 6 ảnh) -->
+            <div class="absolute bottom-12 z-20 w-full flex justify-center">
+                <div class="carousel-container">
+                    <div class="carousel-spinner" id="carouselSpinner"></div>
+                </div>
+            </div>
+
+            <div class="absolute bottom-2 z-20 text-center w-full px-4">
+                <p class="text-pink-300 font-handwriting text-lg sm:text-xl drop-shadow-[0_0_10px_rgba(255,105,180,0.8)]">
+                    "Vẫn gần em thôi, dù xa cách khung trời..."
+                </p>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        /* ================= DỮ LIỆU BỘ ẢNH VÀ LỜI CHÚC (ĐỦ 6 ẢNH CHO CAROUSEL) ================= */
+        const albumData = [
+            {
+                img: "anh1.jpg",
+                caption: "Lần đầu gặp em, anh chưa nghĩ rằng em lại trở nên quan trọng với anh đến thế...",
+                sub: "Kỷ niệm ngày đầu tiên ✨"
+            },
+            {
+                img: "anh2.jpg",
+                caption: "Nhưng qua từng câu chuyện, nụ cười của em đã làm anh xao xuyến lúc nào không hay 💕",
+                sub: "Đồ dễ thương của anh 🌸"
+            },
+            {
+                img: "anh3.jpg",
+                caption: "Cảm ơn em vì đã đến và làm cho mỗi ngày của anh đều trở nên đặc biệt và ngập tràn hạnh phúc!",
+                sub: "Yêu em nhiều lắm ❤️"
+            },
+            {
+                img: "anh4.jpg",
+                caption: "Chúc em gái của anh ngày 20/10 thật nhiều niềm vui, xinh đẹp và mãi luôn rạng rỡ nhé! 🥰",
+                sub: "Mãi bên nhau nhé ebe ✨"
+            }
+        ];
+
+        // Đủ 6 ảnh dùng riêng cho vòng xoay Carousel trang cuối
+        const carouselImages = [
+            "anh1.jpg",
+            "anh2.jpg",
+            "anh3.jpg",
+            "anh4.jpg",
+            "anh5.jpg",
+            "anh6.jpg"
+        ];
+
+        const wishList = [
+            "20/10 vui vẻ 🌹",
+            "Luôn hạnh phúc nhé 💖",
+            "Yêu em nhiều lắm 💕",
+            "Mãi bên nhau nhé ✨",
+            "Xinh đẹp & Rạng rỡ 🌸",
+            "Đã có anh ở đây rồi 💑",
+            "Thật nhiều may mắn 🌟",
+            "Nụ cười của em là đẹp nhất 🥰"
+        ];
+
+        let currentCardIndex = 0;
+        let isFlipped = false;
+        let typingTimer = null;
+
+        /* ================= XỬ LÝ ÂM NHẠC NHAC.MP4 ================= */
+        const bgMusic = document.getElementById('bgMusic');
+        const musicIcon = document.getElementById('musicIcon');
+        let isPlaying = false;
+
+        function playAudio() {
+            bgMusic.play().then(() => {
+                isPlaying = true;
+                musicIcon.classList.add('animate-spin');
+                musicIcon.classList.remove('fa-music-slash');
+                musicIcon.classList.add('fa-music');
+            }).catch(e => {
+                console.log("Audio play blocked by browser:", e);
+            });
+        }
+
+        function toggleMusic() {
+            if (isPlaying) {
+                bgMusic.pause();
+                isPlaying = false;
+                musicIcon.classList.remove('animate-spin');
+                musicIcon.classList.remove('fa-music');
+                musicIcon.classList.add('fa-music-slash');
+            } else {
+                playAudio();
+            }
+        }
+
+        /* ================= HIỆU ỨNG GÕ CHỮ TỪNG KÝ TỰ (TYPEWRITER) ================= */
+        function typeWriter(element, text, speed = 40, callback = null) {
+            if (typingTimer) clearInterval(typingTimer);
+            element.innerText = '';
+            element.classList.add('typing-cursor');
+            let index = 0;
+
+            typingTimer = setInterval(() => {
+                if (index < text.length) {
+                    element.innerText += text.charAt(index);
+                    index++;
+                } else {
+                    clearInterval(typingTimer);
+                    element.classList.remove('typing-cursor');
+                    if (callback) callback();
+                }
+            }, speed);
+        }
+
+        /* ================= TẠO HIỆU ỨNG TRÁI TIM BAY Ở PHÔNG NỀN ================= */
+        function createFloatingHearts() {
+            for (let i = 0; i < 20; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'floating-heart';
+                heart.innerHTML = '❤️';
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.top = Math.random() * 100 + 'vh';
+                heart.style.fontSize = (Math.random() * 18 + 12) + 'px';
+                heart.style.animationDuration = (Math.random() * 6 + 6) + 's';
+                heart.style.animationDelay = (Math.random() * 5) + 's';
+                heart.style.opacity = Math.random() * 0.7 + 0.3;
+                document.body.appendChild(heart);
+            }
+        }
+        createFloatingHearts();
+
+        /* ================= CHUYỂN MÀN HÌNH MỞ QUÀ ================= */
+        function openGift() {
+            playAudio();
+
+            const s1 = document.getElementById('stage1');
+            const s2 = document.getElementById('stage2');
+
+            s1.style.opacity = '0';
+            setTimeout(() => {
+                s1.style.display = 'none';
+                s2.classList.remove('pointer-events-none');
+                s2.style.opacity = '1';
+                
+                document.getElementById('cardImgFront').src = albumData[0].img;
+                typeWriter(document.getElementById('cardCaptionFront'), albumData[0].caption);
+                document.getElementById('subCaption').innerText = albumData[0].sub;
+            }, 1000);
+        }
+
+        /* ================= XỬ LÝ LẬT THIỆP & NẠP CÂU CHÚC CHẠY TỪNG CHỮ ================= */
+        function nextCard() {
+            currentCardIndex++;
+            if (currentCardIndex >= albumData.length) {
+                transitionToStage3();
+                return;
+            }
+
+            const cardInner = document.getElementById('cardInner');
+            const data = albumData[currentCardIndex];
+            const subCaption = document.getElementById('subCaption');
+
+            isFlipped = !isFlipped;
+
+            if (isFlipped) {
+                document.getElementById('cardImgBack').src = data.img;
+                cardInner.classList.add('flipped');
+                setTimeout(() => {
+                    typeWriter(document.getElementById('cardCaptionBack'), data.caption);
+                }, 400);
+            } else {
+                document.getElementById('cardImgFront').src = data.img;
+                cardInner.classList.remove('flipped');
+                setTimeout(() => {
+                    typeWriter(document.getElementById('cardCaptionFront'), data.caption);
+                }, 400);
+            }
+
+            subCaption.innerText = data.sub;
+        }
+
+        /* ================= CHUYỂN SANG STAGE 3 (ĐÊM LẮNG ĐỌNG) ================= */
+        function transitionToStage3() {
+            const s2 = document.getElementById('stage2');
+            const s3 = document.getElementById('stage3');
+            const loader = document.getElementById('nightLoader');
+
+            s2.style.opacity = '0';
+            setTimeout(() => {
+                s2.style.display = 'none';
+                s3.classList.remove('pointer-events-none');
+                s3.style.opacity = '1';
+
+                initHeartCanvas();
+                build3DCarousel();
+                spawnFloatingWishesSequentially();
+
+                setTimeout(() => {
+                    loader.style.opacity = '0';
+                    setTimeout(() => loader.style.display = 'none', 700);
+                }, 1200);
+
+            }, 1000);
+        }
+
+        /* ================= DỰNG VÒNG XOAY 3D CAROUSEL VỚI 6 ẢNH ================= */
+        function build3DCarousel() {
+            const spinner = document.getElementById('carouselSpinner');
+            spinner.innerHTML = '';
+            
+            const count = carouselImages.length; // 6 ảnh
+            const angle = 360 / count;
+            const radius = 175; // Điều chỉnh bán kính phù hợp cho 6 ảnh
+
+            carouselImages.forEach((imgUrl, index) => {
+                const card = document.createElement('div');
+                card.className = 'carousel-card';
+                card.style.transform = `rotateY(${index * angle}deg) translateZ(${radius}px)`;
+                
+                const img = document.createElement('img');
+                img.src = imgUrl;
+                img.className = 'w-full h-full object-cover';
+                
+                card.appendChild(img);
+                spinner.appendChild(card);
+            });
+        }
+
+        /* ================= HIỂN THỊ CÁC CÂU CHÚC NEON XUẤT HIỆN LẦN LƯỢT ================= */
+        function spawnFloatingWishesSequentially() {
+            const container = document.getElementById('floatingWishes');
+            container.innerHTML = '';
+
+            const positions = [
+                { top: '15%', left: '8%' },
+                { top: '20%', right: '8%' },
+                { top: '38%', left: '5%' },
+                { top: '42%', right: '6%' },
+                { top: '58%', left: '10%' },
+                { top: '62%', right: '12%' },
+                { top: '28%', left: '20%' },
+                { top: '32%', right: '22%' }
+            ];
+
+            wishList.forEach((text, i) => {
+                const wish = document.createElement('div');
+                wish.className = 'wish-tag font-handwriting';
+                wish.innerText = text;
+                
+                const pos = positions[i % positions.length];
+                wish.style.top = pos.top;
+                if (pos.left) wish.style.left = pos.left;
+                if (pos.right) wish.style.right = pos.right;
+
+                wish.style.animationDelay = `${i * 0.5}s, ${i * 0.5}s`;
+                container.appendChild(wish);
+            });
+        }
+
+        /* ================= TRÁI TIM HẠT 3D (CANVAS) ================= */
+        function initHeartCanvas() {
+            const canvas = document.getElementById('heartCanvas');
+            const ctx = canvas.getContext('2d');
+
+            function resizeCanvas() {
+                canvas.width = canvas.parentElement.clientWidth;
+                canvas.height = canvas.parentElement.clientHeight;
+            }
+            resizeCanvas();
+
+            const particles = [];
+            const particleCount = 400;
+
+            function heartFunction(t) {
+                const x = 16 * Math.pow(Math.sin(t), 3);
+                const y = -(13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t));
+                return { x, y };
+            }
+
+            for (let i = 0; i < particleCount; i++) {
+                const t = Math.random() * Math.PI * 2;
+                const pos = heartFunction(t);
+                const scale = Math.min(canvas.width, canvas.height) / 45;
+
+                particles.push({
+                    baseX: pos.x * scale,
+                    baseY: pos.y * scale,
+                    x: pos.x * scale,
+                    y: pos.y * scale,
+                    size: Math.random() * 2.5 + 1,
+                    color: `hsl(${Math.random() * 30 + 330}, 100%, ${Math.random() * 30 + 60}%)`,
+                    alpha: Math.random() * 0.8 + 0.2,
+                    speedX: (Math.random() - 0.5) * 0.8,
+                    speedY: (Math.random() - 0.5) * 0.8,
+                });
+            }
+
+            let angle = 0;
+
+            function render() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                const centerX = canvas.width / 2;
+                const centerY = canvas.height / 2 - 50;
+
+                angle += 0.02;
+                const zoom = 1 + Math.sin(angle) * 0.05;
+
+                particles.forEach(p => {
+                    p.x += p.speedX;
+                    p.y += p.speedY;
+
+                    const targetX = p.baseX * zoom;
+                    const targetY = p.baseY * zoom;
+
+                    p.x += (targetX - p.x) * 0.05;
+                    p.y += (targetY - p.y) * 0.05;
+
+                    ctx.save();
+                    ctx.globalAlpha = p.alpha;
+                    ctx.shadowBlur = 10;
+                    ctx.shadowColor = p.color;
+                    ctx.fillStyle = p.color;
+                    ctx.beginPath();
+                    ctx.arc(centerX + p.x, centerY + p.y, p.size, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.restore();
+                });
+
+                requestAnimationFrame(render);
+            }
+
+            render();
+        }
+    </script>
+</body>
+</html>
